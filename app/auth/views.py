@@ -45,7 +45,3 @@ def refreshToken():
     user_id = get_jwt_identity()
     access_token = create_access_token(str(user_id))
     return {"access_token" : access_token}, 200
-
-
-def verifyToken():
-    return {"msg": "Token is valid"}, 200
