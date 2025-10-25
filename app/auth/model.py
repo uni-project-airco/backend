@@ -1,6 +1,5 @@
 from datetime import datetime
 from bson import ObjectId
-from app import mongo 
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class AuthUser:
@@ -38,14 +37,14 @@ class AuthUser:
         )
     
     @staticmethod
-    def find_by_email(email):
-        data = mongo.db.users.find_one({"email": email})
+    def find_by_email(db,email):
+        data = db.users.find_one({"email": email})
         return AuthUser.from_mongo(data) if data else None
     
-    def save(self):
+    def save(db,self):
         if self.password and not self.password.startswith("pbkdf2:sha256:"):
             self.password = self.hash_password(self.password)
 
-        user = mongo.db.users.insert_one(self.to_dict())
+        user = db.users.insert_one(self.to_dict())
         self._id = str(user.inserted_id)
         return self._id

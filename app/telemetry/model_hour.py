@@ -1,6 +1,5 @@
 from datetime import datetime
 from bson import ObjectId
-from app import mongo
 
 class TelemetryPerHour:
     def __init__(self, avg_temperature, avg_humidity, avg_co2, avg_pm25, updated_at=None, _id=None):
@@ -32,10 +31,10 @@ class TelemetryPerHour:
             _id = data.get("_id")
         )
     
-    def get_by_id(telemetry_id):
-        data = mongo.db.telemetry_per_hour.find_one({"_id":ObjectId(telemetry_id)})
+    def get_by_id(db,telemetry_id):
+        data = db.telemetry_per_hour.find_one({"_id":ObjectId(telemetry_id)})
         return TelemetryPerHour.from_mongo(data) if data else None
     
-    def get_by_date(date_time):
-        data = mongo.db.telemetry_per_hour.find_one({"updated_at":date_time})
+    def get_by_date(db,date_time):
+        data = db.telemetry_per_hour.find_one({"updated_at":date_time})
         return TelemetryPerHour.from_mongo(data) if data else None

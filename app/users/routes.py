@@ -1,5 +1,5 @@
 from flask import Blueprint
-from app import mongo
+from app import mongo_dev
 
 users_bp = Blueprint("users", __name__)
 
