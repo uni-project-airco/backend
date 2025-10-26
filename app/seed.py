@@ -2,6 +2,9 @@ from datetime import datetime, timezone
 from app import create_app, mongo_dev
 from app.auth.model import AuthUser
 from app.system.model import System
+from app.telemetry.model import Telemetry
+from app.telemetry.model_day import TelemetryPerDay
+from app.telemetry.model_hour import TelemetryPerHour
 from app.users.model import User
 from app.notifications.model import Notification
 
@@ -68,6 +71,55 @@ def seed_auth(db):
     else:
         print("\N{SMILING FACE WITH OPEN MOUTH AND COLD SWEAT} Auth already exist")
 
+def seed_telemetry_pd(db):
+    if db.telemetry_per_day.count_documents({}) == 0:
+
+        telemetry_pd = TelemetryPerDay(
+            avg_temperature="avg_temperature",
+            avg_humidity="avg_humidity",
+            avg_co2="avg_co2",
+            avg_pm25="avg_pm25",
+            updated_at="updated_at",
+            _id="_id"
+        )
+        db.telemetry_per_day.insert_one(telemetry_pd.to_dict())
+        print("\N{GRINNING FACE} TelemetryPerDay created")
+    else:
+        print("\N{SMILING FACE WITH OPEN MOUTH AND COLD SWEAT} TelemetryPerDay already exist")
+
+def seed_telemetry_ph(db):
+    if db.telemetry_per_hour.count_documents({}) == 0:
+        telemetry_ph = TelemetryPerHour(
+            avg_temperature="avg_temperature",
+            avg_humidity="avg_humidity",
+            avg_co2="avg_co2",
+            avg_pm25="avg_pm25",
+            updated_at="updated_at",
+            _id ="_id"
+        )
+
+        db.telemetry_per_hour.insert_one(telemetry_ph.to_dict())
+        print("\N{GRINNING FACE} Telemetry_per_hour created")
+    else:
+        print("\N{SMILING FACE WITH OPEN MOUTH AND COLD SWEAT} Telemetry already exist")
+
+
+def seed_telemetry(db):
+    if db.telemetry.count_documents({}) == 0:
+        telemetry = Telemetry(
+            temperature="temperature",
+            humidity="humidity",
+            co2="co2",
+            pm25="pm25",
+            created_at="created_at",
+            _id="_id"
+        )
+
+        db.telemetry.insert_one(telemetry.to_dict())
+        print("\N{GRINNING FACE} Telemetry created")
+    else:
+        print("\N{SMILING FACE WITH OPEN MOUTH AND COLD SWEAT} Telemetry already exist")
+
 
 def seed_all():
     with app.app_context():
@@ -76,7 +128,9 @@ def seed_all():
         seed_notifications(db)
         seed_system(db)
         seed_auth(db)
-
+        seed_telemetry(db)
+        seed_telemetry_pd(db)
+        seed_telemetry_ph(db)
         print(" \N{SMILING FACE WITH SUNGLASSES} Seeding completed.")
 
 

@@ -23,10 +23,21 @@ def init_db_for(db):
         db.create_collection("notifications")
     db.notifications.create_index([("id", ASCENDING)], unique=True)
 
+    if "telemetry_per_day" not in db.list_collection_names():
+        db.create_collection("telemetry_per_day")
+    db.telemetry.create_index([("id", ASCENDING)], unique=True)
+    db.telemetry.create_index([("updated_at", ASCENDING)])
+
+    if "telemetry_per_hour" not in db.list_collection_names():
+        db.create_collection("telemetry_per_hour")
+    db.telemetry.create_index([("id", ASCENDING)], unique=True)
+    db.telemetry.create_index([("updated_at", ASCENDING)])
+
     if "telemetry" not in db.list_collection_names():
         db.create_collection("telemetry")
     db.telemetry.create_index([("id", ASCENDING)], unique=True)
     db.telemetry.create_index([("created_at", ASCENDING)])
+
 
 
 def init_db():

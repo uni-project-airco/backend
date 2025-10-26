@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from bson import ObjectId
 
 class TelemetryPerHour:
@@ -8,7 +8,7 @@ class TelemetryPerHour:
         self.avg_humidity = avg_humidity
         self.avg_co2 = avg_co2
         self.avg_pm25 = avg_pm25
-        self.updated_at = updated_at or datetime.now(datetime.timezone.utc)
+        self.updated_at = updated_at or datetime.now(timezone.utc)
 
     
     def to_dict(self):
