@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from bson import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -8,7 +8,7 @@ class AuthUser:
         self.username = username
         self.email = email
         self.password = password
-        self.created_at = created_at or datetime.now(datetime.timezone.utc)
+        self.created_at = created_at or datetime.now(timezone.utc)
         
     def to_dict(self):
         return {
