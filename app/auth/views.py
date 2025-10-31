@@ -19,8 +19,8 @@ def registerUser(request):
     
     userId = user.save()
 
-    access_token = generateAccessToken(str(user.get("id")))
-    refresh_token = generateRefreshToken(str(user.get("id")))
+    access_token = generateAccessToken(str(user.id))
+    refresh_token = generateRefreshToken(str(user.id))
     
     return {"msg" : "User successfully registered and logged in", "access_token" : access_token, "refresh_token" : refresh_token}, 200
 
@@ -32,12 +32,13 @@ def loginUser(request):
     username = data.get("username")
 
     user = mongo.db.users.find_one({"username" : username})
+    print(user)
 
     if not user or not check_password_hash(user.get("password"), password):
         return {"msg" : "Bad credentials"}, 403
     
-    access_token = generateAccessToken(str(user.get("id")))
-    refresh_token = generateRefreshToken(str(user.get("id")))
+    access_token = generateAccessToken(str(user.get("_id")))
+    refresh_token = generateRefreshToken(str(user.get("_id")))
 
     return {"access_token" : access_token, "refresh_token" : refresh_token}, 200
 
