@@ -4,12 +4,12 @@ from app import mongo
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class AuthUser:
-    def __init__(self, username, email, password, confirm_password, created_at=None, _id=None):
+    def __init__(self, username, email, password, created_at=None, _id=None):
         self._id = str(_id) if _id else None
         self.username = username
         self.email = email
         self.password = password
-        self.created_at = created_at or datetime.now(datetime.timezone.utc)
+        self.created_at = created_at or datetime.now()
         
     def to_dict(self):
         return {
