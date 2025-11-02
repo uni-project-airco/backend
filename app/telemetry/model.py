@@ -1,6 +1,5 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from bson import ObjectId
-from app import mongo
 
 class Telemetry:
     def __init__(self, temperature, humidity, co2, pm25, created_at=None, _id=None):
@@ -9,7 +8,7 @@ class Telemetry:
         self.humidity = humidity
         self.co2 = co2
         self.pm25 = pm25
-        self.created_at = created_at or datetime.now(datetime.timezone.utc)
+        self.created_at = created_at or datetime.now(timezone.utc)
 
     
     def to_dict(self):
@@ -32,10 +31,10 @@ class Telemetry:
             _id = data.get("_id")
         )
     
-    def get_by_id(telemetry_id):
-        data = mongo.db.telemetry.find_one({"_id":ObjectId(telemetry_id)})
+    def get_by_id(db,telemetry_id):
+        data = db.telemetry.find_one({"_id":ObjectId(telemetry_id)})
         return Telemetry.from_mongo(data) if data else None
     
-    def get_by_date(date_time):
-        data = mongo.db.telemetry.find_one({"created_at":date_time})
+    def get_by_date(db,date_time):
+        data = db.telemetry.find_one({"created_at":date_time})
         return Telemetry.from_mongo(data) if data else None
