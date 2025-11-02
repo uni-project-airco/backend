@@ -1,5 +1,5 @@
 from ..users.model import User
-from app import mongo
+from app.extensions import mongoDB
 from werkzeug.security import check_password_hash
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity
 
@@ -14,10 +14,10 @@ def registerUser(request):
 
     user = User.from_mongo(data)
 
-    if mongo.db.users.find_one({"username" : user.username}):
+    if mongoDB.db.users.find_one({"username" : user.username}):
         return {"msg" : "You already have an account. Try Login"}
     
-    userId = user.save()
+    user.save()
 
     access_token = generateAccessToken(str(user.id))
     refresh_token = generateRefreshToken(str(user.id))
@@ -31,7 +31,7 @@ def loginUser(request):
     password = data.get("password")
     username = data.get("username")
 
-    user = mongo.db.users.find_one({"username" : username})
+    user = mongoDB.db.users.find_one({"username" : username})
     print(user)
 
     if not user or not check_password_hash(user.get("password"), password):

@@ -1,5 +1,4 @@
 from flask import Blueprint
-from app import mongo
 
 system_bp = Blueprint("system", __name__)
 

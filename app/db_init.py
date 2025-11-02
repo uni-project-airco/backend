@@ -1,8 +1,10 @@
-from app import mongo_dev, create_app
-from app import  mongo_prod
 from pymongo import ASCENDING
 
+from app.extensions import mongoDB
+from app import create_app
+
 app = create_app()
+
 
 def init_db_for(db):
     if "users" not in db.list_collection_names():
@@ -39,11 +41,9 @@ def init_db_for(db):
     db.telemetry.create_index([("created_at", ASCENDING)])
 
 
-
 def init_db():
     with app.app_context():
-        init_db_for(mongo_dev.db)
-        init_db_for(mongo_prod.db)
+        init_db_for(mongoDB.db)
 
 if __name__ == "__main__":
     init_db()

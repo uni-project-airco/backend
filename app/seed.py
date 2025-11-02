@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
-from app import create_app, mongo_dev
+from app.extensions import mongoDB
+from app import create_app
 from app.auth.model import AuthUser
 from app.system.model import System
 from app.telemetry.model import Telemetry
@@ -123,7 +124,7 @@ def seed_telemetry(db):
 
 def seed_all():
     with app.app_context():
-        db = mongo_dev.db
+        db = mongoDB.db
         seed_users(db)
         seed_notifications(db)
         seed_system(db)

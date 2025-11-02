@@ -1,5 +1,4 @@
 from flask import Blueprint, request
-from app import mongo
 from flask_jwt_extended import jwt_required
 
 from .views import *

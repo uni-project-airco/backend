@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from bson import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
+from app.extensions import mongoDB
 
 class User:
     def __init__(self, system_id, username, email, password, notifications=None, is_admin=False, created_at=None, _id=None):
@@ -59,6 +60,6 @@ class User:
         if self.password and not self.password.startswith("pbkdf2:sha256:"):
             self.password = self.hash_password(self.password)
 
-        user = mongo.db.users.insert_one(self.to_dict())
+        user = mongoDB.db.users.insert_one(self.to_dict())
         self._id = str(user.inserted_id)
         return self._id
