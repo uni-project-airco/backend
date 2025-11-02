@@ -11,6 +11,7 @@ from app.notifications.model import Notification
 
 app = create_app()
 
+
 def seed_users(db):
     if db.users.count_documents({}) == 0:
         admin_user = User(
@@ -18,7 +19,7 @@ def seed_users(db):
             email="admin@safeair.dev",
             password="hashed_admin_password",
             is_admin=True,
-            system_id=0
+            system_id=0,
         )
 
         tester_user = User(
@@ -26,7 +27,7 @@ def seed_users(db):
             email="tester@safeair.dev",
             password="hashed_tester_password",
             is_admin=False,
-            system_id=0
+            system_id=0,
         )
 
         db.users.insert_many([admin_user.to_dict(), tester_user.to_dict()])
@@ -37,15 +38,14 @@ def seed_users(db):
 
 def seed_notifications(db):
     if db.notifications.count_documents({}) == 0:
-        notification = Notification(
-            metric="metric",
-            threshold=20.0,
-            is_enabled=True
-        )
+        notification = Notification(metric="metric", threshold=20.0, is_enabled=True)
         db.notifications.insert_one(notification.to_dict())
         print("\N{GRINNING FACE} Notification created")
     else:
-        print("\N{SMILING FACE WITH OPEN MOUTH AND COLD SWEAT} Notification already exist")
+        print(
+            "\N{SMILING FACE WITH OPEN MOUTH AND COLD SWEAT} Notification already exist"
+        )
+
 
 def seed_system(db):
     if db.system.count_documents({}) == 0:
@@ -62,15 +62,13 @@ def seed_system(db):
 def seed_auth(db):
     if db.auth.count_documents({}) == 0:
         auth = AuthUser(
-            username="username",
-            email="email",
-            password="",
-            confirm_password=""
+            username="username", email="email", password="", confirm_password=""
         )
         db.auth.insert_one(auth.to_dict())
         print("\N{GRINNING FACE} Auth created")
     else:
         print("\N{SMILING FACE WITH OPEN MOUTH AND COLD SWEAT} Auth already exist")
+
 
 def seed_telemetry_pd(db):
     if db.telemetry_per_day.count_documents({}) == 0:
@@ -81,12 +79,15 @@ def seed_telemetry_pd(db):
             avg_co2="avg_co2",
             avg_pm25="avg_pm25",
             updated_at="updated_at",
-            _id="_id"
+            _id="_id",
         )
         db.telemetry_per_day.insert_one(telemetry_pd.to_dict())
         print("\N{GRINNING FACE} TelemetryPerDay created")
     else:
-        print("\N{SMILING FACE WITH OPEN MOUTH AND COLD SWEAT} TelemetryPerDay already exist")
+        print(
+            "\N{SMILING FACE WITH OPEN MOUTH AND COLD SWEAT} TelemetryPerDay already exist"
+        )
+
 
 def seed_telemetry_ph(db):
     if db.telemetry_per_hour.count_documents({}) == 0:
@@ -96,7 +97,7 @@ def seed_telemetry_ph(db):
             avg_co2="avg_co2",
             avg_pm25="avg_pm25",
             updated_at="updated_at",
-            _id ="_id"
+            _id="_id",
         )
 
         db.telemetry_per_hour.insert_one(telemetry_ph.to_dict())
@@ -113,7 +114,7 @@ def seed_telemetry(db):
             co2="co2",
             pm25="pm25",
             created_at="created_at",
-            _id="_id"
+            _id="_id",
         )
 
         db.telemetry.insert_one(telemetry.to_dict())

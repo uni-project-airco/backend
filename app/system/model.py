@@ -1,5 +1,6 @@
 from bson import ObjectId
 
+
 class System:
     def __init__(self, name, description, users=None, _id=None):
         self._id = str(_id) if _id else None
@@ -7,7 +8,4 @@ class System:
         self.description = description
 
     def to_dict(self):
-        return {
-            "name": self.name,
-            "description":self.description
-        }
+        return {"name": self.name, "description": self.description}

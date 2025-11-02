@@ -45,5 +45,6 @@ def init_db():
     with app.app_context():
         init_db_for(mongoDB.db)
 
+
 if __name__ == "__main__":
     init_db()

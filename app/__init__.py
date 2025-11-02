@@ -16,21 +16,24 @@ from app.users.routes import users_bp
 def create_app():
     load_dotenv(find_dotenv())
 
-    dictConfig({
-        'version': 1,
-        'formatters': {'default': {
-            'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
-        }},
-        'handlers': {'wsgi': {
-            'class': 'logging.StreamHandler',
-            'stream': 'ext://flask.logging.wsgi_errors_stream',
-            'formatter': 'default'
-        }},
-        'root': {
-            'level': 'INFO',
-            'handlers': ['wsgi']
+    dictConfig(
+        {
+            "version": 1,
+            "formatters": {
+                "default": {
+                    "format": "[%(asctime)s] %(levelname)s in %(module)s: %(message)s",
+                }
+            },
+            "handlers": {
+                "wsgi": {
+                    "class": "logging.StreamHandler",
+                    "stream": "ext://flask.logging.wsgi_errors_stream",
+                    "formatter": "default",
+                }
+            },
+            "root": {"level": "INFO", "handlers": ["wsgi"]},
         }
-    })
+    )
 
     app = Flask(__name__)
 
@@ -39,8 +42,9 @@ def create_app():
     db_password = quote_plus(os.getenv("MONGO_PASSWORD"))
     db_name = os.getenv("MONGO_DB_NAME")
     cluster_name = os.getenv("MONGO_CLUSTER_NAME")
-    app.config[
-        "MONGO_URI"] = f"mongodb+srv://{db_user}:{db_password}@{cluster_name}.mongodb.net/{db_name}?retryWrites=true&w=majority"
+    app.config["MONGO_URI"] = (
+        f"mongodb+srv://{db_user}:{db_password}@{cluster_name}.mongodb.net/{db_name}?retryWrites=true&w=majority"
+    )
     app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY")
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=60)
     mongoDB.init_app(app)
