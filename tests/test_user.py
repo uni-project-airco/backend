@@ -50,7 +50,7 @@ def test_change_username_missing_userid(mock_request):
         assert result["msg"] == "user_id is missing"
 
 
-#Test changeUsername
+#Test changeEmail
 @patch("app.users.views.mongoDB")
 @patch("app.users.views.User")
 @patch("app.users.views.get_jwt_identity", return_value="1")
@@ -113,8 +113,8 @@ def test_change_password_success(mock_identity, mock_user, mock_db, mock_request
 
 def test_change_password_missing_fields(mock_request):
     request = mock_request({"oldPassword": "oldpass"})
-    with patch("app.views.views.get_jwt_identity", return_value="123"), \
-         patch("app.views.views.User.get_by_id", return_value=MagicMock()):
+    with patch("app.users.views.get_jwt_identity", return_value="123"), \
+         patch("app.users.views.User.get_by_id", return_value=MagicMock()):
         result, status = changePassword(request)
         assert status == 400
         assert result["msg"] == "old password or new password missing"
@@ -125,8 +125,8 @@ def test_change_password_wrong_old_password(mock_request):
     user_instance = MagicMock()
     user_instance.verify_password.return_value = False
 
-    with patch("app.views.views.get_jwt_identity", return_value="123"), \
-         patch("app.views.views.User.get_by_id", return_value=user_instance):
+    with patch("app.users.views.get_jwt_identity", return_value="123"), \
+         patch("app.users.views.User.get_by_id", return_value=user_instance):
         result, status = changePassword(request)
         assert status == 403
         assert result["msg"] == "wrong password"
