@@ -1,16 +1,56 @@
-from flask import Flask
-from flask_pymongo import PyMongo
+import os
+from datetime import timedelta
+from logging.config import dictConfig
+from urllib.parse import quote_plus
 
-mongo = PyMongo()
+from dotenv import load_dotenv, find_dotenv
+from flask import Flask
+
+# Blueprints
+from app.auth.routes import auth_bp
+from app.extensions import mongoDB, jwt
+from app.system.routes import system_bp
+from app.users.routes import users_bp
+
 
 def create_app():
+    load_dotenv(find_dotenv())
+
+    dictConfig(
+        {
+            "version": 1,
+            "formatters": {
+                "default": {
+                    "format": "[%(asctime)s] %(levelname)s in %(module)s: %(message)s",
+                }
+            },
+            "handlers": {
+                "wsgi": {
+                    "class": "logging.StreamHandler",
+                    "stream": "ext://flask.logging.wsgi_errors_stream",
+                    "formatter": "default",
+                }
+            },
+            "root": {"level": "INFO", "handlers": ["wsgi"]},
+        }
+    )
+
     app = Flask(__name__)
 
-    app.config["MONGO_URI"] = "mongodb://localhost:27017"
-    mongo.init_app(app)
-
-    from app.users.routes import users_bp
+    # --- PROD ---
+    db_user = os.getenv("MONGO_USER")
+    db_password = quote_plus(os.getenv("MONGO_PASSWORD"))
+    db_name = os.getenv("MONGO_DB_NAME")
+    cluster_name = os.getenv("MONGO_CLUSTER_NAME")
+    app.config["MONGO_URI"] = (
+        f"mongodb+srv://{db_user}:{db_password}@{cluster_name}.mongodb.net/{db_name}?retryWrites=true&w=majority"
+    )
+    app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY")
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=60)
+    mongoDB.init_app(app)
 
     app.register_blueprint(users_bp, url_prefix="/users")
+    app.register_blueprint(system_bp, url_prefix="/")
+    app.register_blueprint(auth_bp, url_prefix="/auth")
 
     return app
