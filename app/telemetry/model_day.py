@@ -47,3 +47,8 @@ class TelemetryPerDay:
     def get_by_date(db, date_time):
         data = db.telemetry_per_day.find_one({"updated_at": date_time})
         return TelemetryPerDay.from_mongo(data) if data else None
+    
+    def save(db, self):
+        telemetry = db.telemetry_per_day.insert_one(self.to_dict())
+        self._id = str(telemetry.inserted_id)
+        return self._id

@@ -3,12 +3,13 @@ from datetime import timedelta
 from logging.config import dictConfig
 from urllib.parse import quote_plus
 
+
 from dotenv import load_dotenv, find_dotenv
 from flask import Flask
 
 # Blueprints
 from app.auth.routes import auth_bp
-from app.extensions import mongoDB, jwt
+from app.extensions import mongoDB, jwt, scheduler
 from app.system.routes import system_bp
 from app.users.routes import users_bp
 

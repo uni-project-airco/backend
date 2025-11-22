@@ -38,3 +38,8 @@ class Telemetry:
     def get_by_date(db, date_time):
         data = db.telemetry.find_one({"created_at": date_time})
         return Telemetry.from_mongo(data) if data else None
+    
+    def save(db, self):
+        telemetry = db.telemetry.insert_one(self.to_dict())
+        self._id = str(telemetry.inserted_id)
+        return self._id

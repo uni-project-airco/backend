@@ -17,7 +17,7 @@ class TelemetryPerHour:
         self.avg_humidity = avg_humidity
         self.avg_co2 = avg_co2
         self.avg_pm25 = avg_pm25
-        self.updated_at = updated_at or datetime.now(timezone.utc)
+        self.updated_at = updated_at or datetime.now()
 
     def to_dict(self):
         return {
@@ -46,3 +46,8 @@ class TelemetryPerHour:
     def get_by_date(db, date_time):
         data = db.telemetry_per_hour.find_one({"updated_at": date_time})
         return TelemetryPerHour.from_mongo(data) if data else None
+    
+    def save(db, self):
+        telemetry = db.telemetry_per_hour.insert_one(self.to_dict())
+        self._id = str(telemetry.inserted_id)
+        return self._id
