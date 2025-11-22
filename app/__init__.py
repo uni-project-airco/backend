@@ -47,6 +47,7 @@ def create_app():
     )
     app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY")
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=60)
+    print("Connecting to MongoDB URI:", app.config["MONGO_URI"])
     mongoDB.init_app(app)
 
     app.register_blueprint(users_bp, url_prefix="/users")

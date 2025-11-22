@@ -3,7 +3,7 @@ from pymongo import ASCENDING
 from app.extensions import mongoDB
 from app import create_app
 
-app = create_app()
+#
 
 
 def init_db_for(db):
@@ -42,6 +42,7 @@ def init_db_for(db):
 
 
 def init_db():
+    app = create_app()
     with app.app_context():
         init_db_for(mongoDB.db)
 

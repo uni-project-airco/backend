@@ -2,14 +2,18 @@
 name = "backend"
 version = "0.1.0"
 description = "Add your description here"
-requires-python = ">=3.13"
+requires-python = ">=3.13,<4"
 dependencies = [
     "flask-jwt-extended>=4.7.1",
     "flask-pymongo>=3.0.1",
     "pytest>=9.0.0",
     "python-dotenv>=1.2.1",
+    "gunicorn==23.0.0",
 ]
-
+[tool.poetry]
+packages = [
+    { include = "app" }
+]
 [dependency-groups]
 dev = [
     "black>=25.9.0",
