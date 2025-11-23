@@ -1,6 +1,6 @@
 version = 1
 revision = 3
-requires-python = ">=3.13"
+requires-python = ">=3.13, <4"
 
 [[package]]
 name = "apscheduler"
@@ -23,6 +23,7 @@ dependencies = [
     { name = "dotenv" },
     { name = "flask-jwt-extended" },
     { name = "flask-pymongo" },
+    { name = "gunicorn" },
     { name = "pytest" },
     { name = "python-dotenv" },
 ]
@@ -38,6 +39,7 @@ requires-dist = [
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "flask-jwt-extended", specifier = ">=4.7.1" },
     { name = "flask-pymongo", specifier = ">=3.0.1" },
+    { name = "gunicorn", specifier = "==23.0.0" },
     { name = "pytest", specifier = ">=9.0.0" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
 ]
@@ -158,6 +160,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/89/22/0b3dd3989ab1636e2fb97f4760ffd858ef77eaa0e84779e2c997f6da9c04/flask_pymongo-3.0.1.tar.gz", hash = "sha256:d225b51c21ceca2e670e6cca79b5c584ad17b96252b48e84e3b423ddb73304cc", size = 7280, upload-time = "2025-01-29T23:45:43.991Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/6a/0b/5142f1b76332c0121c85a9fb5a10dce40bb10d586eea4fda3711abb6c2a4/flask_pymongo-3.0.1-py3-none-any.whl", hash = "sha256:c75a4a9d7f4dc41ddefcfe75d2a0a259049071d285242c1338c42c64dd1223d9", size = 11061, upload-time = "2025-01-29T23:45:41.841Z" },
+]
+
+[[package]]
+name = "gunicorn"
+version = "23.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "packaging" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/34/72/9614c465dc206155d93eff0ca20d42e1e35afc533971379482de953521a4/gunicorn-23.0.0.tar.gz", hash = "sha256:f014447a0101dc57e294f6c18ca6b40227a4c90e9bdb586042628030cba004ec", size = 375031, upload-time = "2024-08-10T20:25:27.378Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/cb/7d/6dac2a6e1eba33ee43f318edbed4ff29151a49b5d37f080aad1e6469bca4/gunicorn-23.0.0-py3-none-any.whl", hash = "sha256:ec400d38950de4dfd418cff8328b2c8faed0edb0d517d3394e457c317908ca4d", size = 85029, upload-time = "2024-08-10T20:25:24.996Z" },
 ]
 
 [[package]]
