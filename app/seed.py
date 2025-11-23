@@ -9,7 +9,6 @@ from app.telemetry.model_hour import TelemetryPerHour
 from app.users.model import User
 from app.notifications.model import Notification
 
-app = create_app()
 
 
 def seed_users(db):
@@ -124,17 +123,17 @@ def seed_telemetry(db):
 
 
 def seed_all():
-    with app.app_context():
-        db = mongoDB.db
-        seed_users(db)
-        seed_notifications(db)
-        seed_system(db)
-        seed_auth(db)
-        seed_telemetry(db)
-        seed_telemetry_pd(db)
-        seed_telemetry_ph(db)
-        print(" \N{SMILING FACE WITH SUNGLASSES} Seeding completed.")
-
+    db = mongoDB.db
+    seed_users(db)
+    seed_notifications(db)
+    seed_system(db)
+    seed_auth(db)
+    seed_telemetry(db)
+    seed_telemetry_pd(db)
+    seed_telemetry_ph(db)
+    print(" \N{SMILING FACE WITH SUNGLASSES} Seeding completed.")
 
 if __name__ == "__main__":
-    seed_all()
+    app = create_app()
+    with app.app_context():
+        seed_all()
