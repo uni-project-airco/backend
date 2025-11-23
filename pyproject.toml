@@ -4,6 +4,8 @@ version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.13,<4"
 dependencies = [
+    "apscheduler>=3.11.1",
+    "dotenv>=0.9.9",
     "flask-jwt-extended>=4.7.1",
     "flask-pymongo>=3.0.1",
     "pytest>=9.0.0",
