@@ -17,11 +17,12 @@ class PubNubClient:
         pn_config.connect_timeout = 10
         pn_config.non_subscribe_request_timeout = 30
         self.pubnub = PubNub(pn_config)
+        self.token_ttl = int(os.getenv("PUBNUB_TOKEN_TTL"))
 
     def grant_channel_access(self, channel_name: str, user_uuid):
         envelope = self.pubnub.grant_token(channels=[
             Channel.id(channel_name).read().write()
-        ]).authorized_uuid(user_uuid).ttl(int(os.getenv("PUBNUB_TOKEN_TTL"))).sync()
+        ]).authorized_uuid(user_uuid).ttl(ttl=self.token_ttl).sync()
 
         return envelope.result.token
 
