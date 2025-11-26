@@ -8,11 +8,9 @@ device_bp = Blueprint("devices", __name__) # TODO add to app
 @device_bp.route("/register", methods=["POST"])
 def register_device():
     body = request.json
-    sensor_id = body.get("sensor_id", None)
+    sensor_id = body.get("sensor_id", None) # take from headers 'sensor-id'
     # certificate_string = body.get("certificate_string", None) # take from headers 'certificate-string'
 
-    if sensor_id is None:
-        return {"msg": "Invalid request"}, 400
 
     # TODO add validation if certificate_string does not match with saved in db return 403, create decorator
 
