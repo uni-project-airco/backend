@@ -2,8 +2,10 @@ from flask import request, Blueprint
 
 from .views import *
 
-telemetry_bp = Blueprint("telemetry", __name__)
+telemetry_bp = Blueprint("telemetry", __name__) #FIXME add to app
 
+
+#TODO add decorator, validate device by certificate_string
 @telemetry_bp("/save_telemetry", methods=["POST"])
 def save_telemetry():
     if not request.is_json:

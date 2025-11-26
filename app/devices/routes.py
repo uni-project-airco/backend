@@ -2,19 +2,19 @@ from flask import Blueprint, request
 
 import pubnub_client
 
-device_bp = Blueprint("devices", __name__)
+device_bp = Blueprint("devices", __name__) # TODO add to app
 
 
 @device_bp.route("/register", methods=["POST"])
 def register_device():
     body = request.json
     sensor_id = body.get("sensor_id", None)
-    certificate_string = body.get("certificate_string", None)
+    # certificate_string = body.get("certificate_string", None) # take from headers 'certificate-string'
 
-    if sensor_id is None or certificate_string is None:
+    if sensor_id is None:
         return {"msg": "Invalid request"}, 400
 
-    # TODO add validation if access_token does not match with saved in db return 403, maybe create decorator
+    # TODO add validation if certificate_string does not match with saved in db return 403, create decorator
 
     channel_name = pubnub_client.CLIENT.generate_chanel_name(sensor_id=sensor_id)
     sensor_token = pubnub_client.CLIENT.grant_channel_access(channel_name, "telemetry-sensor")
