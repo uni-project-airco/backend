@@ -1,6 +1,6 @@
 from app.extensions import mongoDB
 from .model import Telemetry
-
+from pymongo import DESCENDING
 
 def saveTelemetry(request):
     data = request.get_json()
