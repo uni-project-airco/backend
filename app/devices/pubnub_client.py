@@ -1,10 +1,12 @@
 import os
 import uuid
+from dotenv import load_dotenv
 
 from pubnub.models.consumer.v3.channel import Channel
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
 
+load_dotenv()
 
 class PubNubClient:
     def __init__(self):
