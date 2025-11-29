@@ -14,8 +14,8 @@ def saveTelemetry(request):
 
 
 def getTelemetryPerDay():
-    return mongoDB.db.telemetry_per_hour.find().sort("created_at", DESCENDING).limit(24).reverse() 
+    return mongoDB.db.telemetry_per_hour.find().sort("created_at", DESCENDING).limit(24).reverse()
 
 
 def getTelemetryPerWeek():
-    return mongoDB.db.telemetry_per_day.find().sort("created_at", DESCENDING).limit(7).reverse()  
+    return mongoDB.db.telemetry_per_day.find().sort("created_at", DESCENDING).limit(7).reverse()

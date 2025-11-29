@@ -3,7 +3,6 @@ from datetime import timedelta
 from logging.config import dictConfig
 from urllib.parse import quote_plus
 
-
 from dotenv import load_dotenv, find_dotenv
 from flask import Flask
 
@@ -11,6 +10,7 @@ from flask import Flask
 from app.auth.routes import auth_bp
 from app.extensions import mongoDB, jwt, scheduler
 from app.system.routes import system_bp
+from app.telemetry.routes import telemetry_bp
 from app.users.routes import users_bp
 from app.devices.routes import device_bp
 
@@ -54,6 +54,7 @@ def create_app():
     app.register_blueprint(users_bp, url_prefix="/users")
     app.register_blueprint(system_bp, url_prefix="/")
     app.register_blueprint(auth_bp, url_prefix="/auth")
+    app.register_blueprint(telemetry_bp, url_prefix="/telemetry")
     app.register_blueprint(device_bp, url_prefix="/sensor")
 
     return app
