@@ -27,7 +27,7 @@ def validate_certificate_string(func):
 
 @validate_certificate_string
 def registerDevice():
-    sensor_id = request.headers.get("sensor-id", None) # take from headers 'sensor-id'
+    sensor_id = request.headers.get("sensor-id") # take from headers 'sensor-id'
 
     channel_name = CLIENT.generate_chanel_name(sensor_id=sensor_id)
     sensor_token = CLIENT.grant_channel_access(channel_name, "telemetry-sensor")
@@ -43,6 +43,20 @@ def registerDevice():
 
     return {"channel": channel_name, "token": sensor_token}, 201
 
+@validate_certificate_string
+def refreshToken():
+    sensor_id = request.headers.get("sensor-id")
+
+    if not sensor_id:
+        return {"msg" : "Sensor_id not found"}, 404
+    
+    filter = {"sensor_id" : sensor_id}
+
+    channel_name = mongoDB.db.sensor.find_one(filter, {"channel_name": 1, "_id": 0})
+    token = CLIENT.grant_channel_access(channel_name, "telemetry-sensor")
+
+    return {"token" : str(token)}, 200
+    
 @device_bp.route("/register", methods=["POST"])
 def register_device():
     return registerDevice()

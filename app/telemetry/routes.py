@@ -1,12 +1,14 @@
 from flask import request, Blueprint
 
 from .views import *
+from ..devices.routes import validate_certificate_string
 
 telemetry_bp = Blueprint("telemetry", __name__)
 
 
 # TODO add decorator, validate device by certificate_string
 @telemetry_bp.route("/save_telemetry", methods=["POST"])
+@validate_certificate_string
 def save_telemetry():
     if not request.is_json:
         return {"msg": "No JSON provided"}, 400
