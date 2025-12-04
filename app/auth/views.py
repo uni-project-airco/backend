@@ -51,8 +51,8 @@ def loginUser(request):
 
     access_token = generateAccessToken(str(user.get("_id")))
     refresh_token = generateRefreshToken(str(user.get("_id")))
-    sensor_id = request.headers.get("sensor-id")
 
+    sensor_id = user.get("system_id")
     channel_name = CLIENT.generate_chanel_name(sensor_id=sensor_id)
     sensor_token = CLIENT.grant_channel_access(channel_name, "telemetry-sensor")
 
