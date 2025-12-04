@@ -6,6 +6,7 @@ from flask_jwt_extended import (
     create_refresh_token,
     get_jwt_identity,
 )
+from ..devices.pubnub_client import CLIENT
 
 
 def generateAccessToken(identity):
@@ -50,8 +51,12 @@ def loginUser(request):
 
     access_token = generateAccessToken(str(user.get("_id")))
     refresh_token = generateRefreshToken(str(user.get("_id")))
+    sensor_id = request.headers.get("sensor-id")
 
-    return {"access_token": access_token, "refresh_token": refresh_token}, 200
+    channel_name = CLIENT.generate_chanel_name(sensor_id=sensor_id)
+    sensor_token = CLIENT.grant_channel_access(channel_name, "telemetry-sensor")
+
+    return {"access_token": access_token, "refresh_token": refresh_token, "sensor_token" : sensor_token}, 200
 
 
 def refreshToken():
