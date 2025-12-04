@@ -23,3 +23,7 @@ def get_telemetry_per_day():
 @telemetry_bp.route("/get_telemetry_per_week", methods=["GET"])
 def get_telemetry_per_week():
     return getTelemetryPerWeek()
+
+@telemetry_bp.route("get_historical", methods=["GET"])
+def get_historical_data():
+    return getHistoricalData()
