@@ -32,6 +32,9 @@ jobs:
           script: |
             cd /home/${{ secrets.SERVER_USER }}/app
 
+            git fetch
+            git reset --hard origin/main
+
             echo "Building Docker image..."
             docker build -t flask-app:latest .
 
