@@ -2,12 +2,11 @@ name: Auto Deploy Flask on EC2
 
 on:
   push:
-    branches: ["deploy"]
+    branches: ["main"]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-  # to test
     steps:
       # Checkout repo
       - name: Checkout code
