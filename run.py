@@ -1,3 +1,5 @@
+import os
+
 from app import create_app
 from app import scheduler
 import atexit
@@ -10,4 +12,4 @@ if __name__ == "__main__":
     scheduler.add_job(func=store_per_day, trigger="interval", minutes=60)
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
-    app.run(debug=True)
+    app.run(debug=os.getenv("DEVELOPMENT", False))

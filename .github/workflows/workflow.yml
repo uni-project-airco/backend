@@ -1,0 +1,37 @@
+name: Auto Deploy Flask on EC2
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Copy project files to EC2
+      - name: Copy project to EC2
+        uses: appleboy/scp-action@v0.1.5
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "."
+          target: "/home/${{ secrets.SERVER_USER }}/app"
+
+      # SSH into EC2 and deploy
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /home/${{ secrets.SERVER_USER }}/app
+
+            sudo docker compose up --build -d
+
+            echo "Deployment finished successfully!"
