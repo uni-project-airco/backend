@@ -1,11 +1,15 @@
+from pymongo import DESCENDING
+
 from app.extensions import mongoDB
 from .model import Telemetry
 from pymongo import DESCENDING
 from datetime import datetime
 
+
 def saveTelemetry(request):
     data = request.get_json()
-    telemetry = Telemetry.from_mongo(data)
+    sensor_id = request.headers.get("sensor-id")
+    telemetry = Telemetry.from_mongo(data, sensor_id)
 
     telemetry.save()
 
@@ -32,11 +36,12 @@ def getTelemetryPerWeek():
     data = list(mongoDB.db.telemetry_per_day.find({}, {"_id": 0}).sort("updated_at", DESCENDING).limit(7))[::-1]
     return [serialize_doc(d) for d in data]
 
+
 def getHistoricalData():
     day = getTelemetryPerDay()
     week = getTelemetryPerWeek()
 
     if not day or not week:
-        return {"msg" : "Unable to find historical data"}, 400
-    
-    return {"day" : day, "week" : week}, 200
+        return {"msg": "Unable to find historical data"}, 400
+
+    return {"day": day, "week": week}, 200

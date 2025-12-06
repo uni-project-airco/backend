@@ -1,11 +1,13 @@
-from ..users.model import User
-from app.extensions import mongoDB
-from werkzeug.security import check_password_hash
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
     get_jwt_identity,
 )
+from werkzeug.security import check_password_hash
+
+from app.extensions import mongoDB
+from ..devices.pubnub_client import CLIENT
+from ..users.model import User
 
 
 def generateAccessToken(identity):
@@ -51,7 +53,12 @@ def loginUser(request):
     access_token = generateAccessToken(str(user.get("_id")))
     refresh_token = generateRefreshToken(str(user.get("_id")))
 
-    return {"access_token": access_token, "refresh_token": refresh_token}, 200
+    sensor_id = user.get("system_id")
+    sensor = mongoDB.db.sensor.find_one({"sensor_id": sensor_id})
+    channel_name = sensor.get("channel_name")
+    sensor_token = CLIENT.grant_channel_access(channel_name, "android-user")
+
+    return {"access_token": access_token, "refresh_token": refresh_token, "sensor_token" : sensor_token}, 200
 
 
 def refreshToken():
