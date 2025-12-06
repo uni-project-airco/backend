@@ -1,6 +1,7 @@
 from app.extensions import mongoDB
 from .model import Telemetry
 from pymongo import DESCENDING
+from datetime import datetime
 
 def saveTelemetry(request):
     data = request.get_json()
@@ -13,12 +14,23 @@ def saveTelemetry(request):
     }, 200
 
 
-def getTelemetryPerDay():
-    return list(mongoDB.db.telemetry_per_hour.find().sort("created_at", DESCENDING).limit(24))[::-1]
+def serialize_doc(doc):
+    for key, value in doc.items():
+        if isinstance(value, datetime):
+            doc[key] = value.isoformat()
 
+        if isinstance(value, dict) and "$date" in value:
+            doc[key] = value["$date"]
+
+    return doc
+
+def getTelemetryPerDay():
+    data = list(mongoDB.db.telemetry_per_hour.find({}, {"_id": 0}).sort("updated_at", DESCENDING).limit(24))[::-1]
+    return [serialize_doc(d) for d in data]
 
 def getTelemetryPerWeek():
-    return list(mongoDB.db.telemetry_per_day.find().sort("created_at", DESCENDING).limit(7))[::-1]
+    data = list(mongoDB.db.telemetry_per_day.find({}, {"_id": 0}).sort("updated_at", DESCENDING).limit(7))[::-1]
+    return [serialize_doc(d) for d in data]
 
 def getHistoricalData():
     day = getTelemetryPerDay()
