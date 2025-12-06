@@ -14,11 +14,11 @@ def test_store_per_hour_success(mock_db):
 
     # Create 6 fake telemetry documents
     fake_docs = [{
-        "created_at": now - timedelta(minutes=i),
-        "avg_temperature": 20 + i,
-        "avg_humidity": 30 + i,
-        "avg_co2": 400 + i,
-        "avg_pm25": 5 + i
+        "updated_at": now - timedelta(minutes=i),
+        "temperature": 20 + i,
+        "humidity": 30 + i,
+        "co2": 400 + i,
+        "pm25": 5 + i
     } for i in range(6)]
 
     mock_db.db.telemetry.find.return_value.sort.return_value.limit.return_value = fake_docs

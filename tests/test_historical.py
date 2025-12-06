@@ -15,7 +15,7 @@ def test_get_telemetry_per_day(mock_db):
     now = datetime.now()
 
     docs = [
-        {"created_at": now - timedelta(hours=i), "value": i} 
+        {"updated_at": now - timedelta(hours=i), "value": i} 
         for i in range(24)
     ]
 
@@ -54,8 +54,8 @@ def test_get_telemetry_per_week(mock_db):
 def test_get_historical_success(mock_db):
     now = datetime.now()
 
-    day_docs = [{"created_at": now, "temperature": i} for i in range(24)]
-    week_docs = [{"created_at": now, "avg_temp": i} for i in range(7)]
+    day_docs = [{"updated_at": now, "temperature": i} for i in range(24)]
+    week_docs = [{"updated_at": now, "avg_temp": i} for i in range(7)]
 
     # Patch both day + week calls
     mock_db.db.telemetry_per_hour.find.return_value.sort.return_value.limit.return_value = day_docs
