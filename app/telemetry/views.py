@@ -26,6 +26,7 @@ def serialize_doc(doc):
 
 def getTelemetryPerDay():
     data = list(mongoDB.db.telemetry_per_hour.find({}, {"_id": 0}).sort("updated_at", DESCENDING).limit(24))[::-1]
+    data = data[::4]
     return [serialize_doc(d) for d in data]
 
 def getTelemetryPerWeek():
