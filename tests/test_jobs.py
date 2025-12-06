@@ -14,7 +14,7 @@ def test_store_per_hour_success(mock_db):
 
     # Create 6 fake telemetry documents
     fake_docs = [{
-        "created_at": now - timedelta(minutes=i),
+        "updated_at": now - timedelta(minutes=i),
         "temperature": 20 + i,
         "humidity": 30 + i,
         "co2": 400 + i,
@@ -43,7 +43,7 @@ def test_store_per_day_success(mock_db):
     now = datetime.now()
 
     fake_docs = [{
-        "created_at": now - timedelta(hours=i),
+        "updated_at": now - timedelta(hours=i),
         "avg_temperature": 20 + i,
         "avg_humidity": 40 + i,
         "avg_co2": 500 + i,
