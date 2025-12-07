@@ -68,17 +68,18 @@ def create_app():
         if not scheduler.get_jobs():
 
             scheduler.add_job(
-                func=lambda: store_per_hour(),
-                trigger="interval",
-                seconds=10,
-                id="hourly_job"
+                func=store_per_hour,
+                trigger='cron',
+                minute='0',
+                id='hourly_job'
             )
 
             scheduler.add_job(
-                func=lambda: store_per_day(),
-                trigger="interval",
-                hours=24,
-                id="daily_job"
+                func=store_per_day,
+                trigger='cron',
+                hour=0,
+                minute=0,
+                id='daily_job'
             )
 
             scheduler.start()
