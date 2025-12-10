@@ -1,23 +1,24 @@
 import os
+import uuid
 from datetime import timedelta
 from logging.config import dictConfig
 from urllib.parse import quote_plus
 
+from apscheduler.schedulers.background import BackgroundScheduler
 from dotenv import load_dotenv, find_dotenv
 from flask import Flask
 
-from app.jobs import store_per_hour, store_per_day
-from apscheduler.schedulers.background import BackgroundScheduler
-
 # Blueprints
 from app.auth.routes import auth_bp
+from app.devices.routes import device_bp
 from app.extensions import mongoDB, jwt, scheduler
+from app.jobs import store_per_hour, store_per_day
 from app.system.routes import system_bp
 from app.telemetry.routes import telemetry_bp
 from app.users.routes import users_bp
-from app.devices.routes import device_bp
 
 scheduler = BackgroundScheduler()
+
 
 def create_app():
     load_dotenv(find_dotenv())
@@ -62,26 +63,11 @@ def create_app():
     app.register_blueprint(telemetry_bp, url_prefix="/telemetry")
     app.register_blueprint(device_bp, url_prefix="/sensor")
 
-    
     with app.app_context():
-
         if not scheduler.get_jobs():
-
-            scheduler.add_job(
-                func=store_per_hour,
-                trigger='cron',
-                minute='0',
-                id='hourly_job'
-            )
-
-            scheduler.add_job(
-                func=store_per_day,
-                trigger='cron',
-                hour=0,
-                minute=0,
-                id='daily_job'
-            )
-
-            scheduler.start()
+            scheduler.add_job(func=store_per_hour, trigger='cron', minute='0', id=str(uuid.uuid4()))
+            scheduler.add_job(func=store_per_day, trigger='cron', hour=0, minute=0, id=str(uuid.uuid4()))
+            if not scheduler.running:
+                scheduler.start()
 
     return app
