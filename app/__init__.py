@@ -17,9 +17,6 @@ from app.system.routes import system_bp
 from app.telemetry.routes import telemetry_bp
 from app.users.routes import users_bp
 
-scheduler = BackgroundScheduler()
-
-
 def create_app():
     load_dotenv(find_dotenv())
 
@@ -64,10 +61,11 @@ def create_app():
     app.register_blueprint(device_bp, url_prefix="/sensor")
 
     with app.app_context():
-        if not scheduler.get_jobs():
-            scheduler.add_job(func=store_per_hour, trigger='cron', minute='0', id=str(uuid.uuid4()))
-            scheduler.add_job(func=store_per_day, trigger='cron', hour=0, minute=0, id=str(uuid.uuid4()))
+        if os.getpid() == 1:
+            if not scheduler.get_jobs():
+                scheduler.add_job(func=store_per_hour, trigger='cron', minute=0, id=str(uuid.uuid4()))
+                scheduler.add_job(func=store_per_day, trigger='cron', hour=0, minute=0, id=str(uuid.uuid4()))
+
             if not scheduler.running:
                 scheduler.start()
-
     return app
