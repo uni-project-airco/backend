@@ -61,10 +61,11 @@ def create_app():
     app.register_blueprint(device_bp, url_prefix="/sensor")
 
     with app.app_context():
-        if not scheduler.get_jobs():
-            scheduler.add_job(func=store_per_hour, trigger='cron', minute=0, id=str(uuid.uuid4()))
-            scheduler.add_job(func=store_per_day, trigger='cron', hour=0, minute=0, id=str(uuid.uuid4()))
+        if os.getpid() == 1:
+            if not scheduler.get_jobs():
+                scheduler.add_job(func=store_per_hour, trigger='cron', minute=0, id=str(uuid.uuid4()))
+                scheduler.add_job(func=store_per_day, trigger='cron', hour=0, minute=0, id=str(uuid.uuid4()))
+
             if not scheduler.running:
                 scheduler.start()
-
     return app
