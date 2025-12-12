@@ -20,11 +20,13 @@ def generateRefreshToken(identity):
 
 def registerUser(request):
     data = request.get_json()
-
+    if data.get('password') != data.get('confirm_password'):
+        return {"msg": "Passwords do not match"}, 400
     user = User.from_mongo(data)
 
     if mongoDB.db.users.find_one({"username": user.username}):
         return {"msg": "You already have an account. Try Login"}
+
 
     user.save()
 
@@ -35,7 +37,7 @@ def registerUser(request):
         "msg": "User successfully registered and logged in",
         "access_token": access_token,
         "refresh_token": refresh_token,
-    }, 200
+    }, 201
 
 
 def loginUser(request):

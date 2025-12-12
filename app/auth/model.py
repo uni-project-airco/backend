@@ -5,12 +5,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 class AuthUser:
     def __init__(
-        self, username, email, password, confirm_password, created_at=None, _id=None
+        self, username, email, system_id, password, confirm_password, created_at=None, _id=None
     ):
         self._id = str(_id) if _id else None
         self.username = username
         self.email = email
         self.password = password
+        self.system_id = system_id
         self.created_at = created_at or datetime.now(timezone.utc)
 
     def to_dict(self):
@@ -18,6 +19,7 @@ class AuthUser:
             "username": self.username,
             "email": self.email,
             "password": self.password,
+            "system_id": self.system_id,
             "created_at": self.created_at,
         }
 
